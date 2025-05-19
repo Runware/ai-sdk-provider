@@ -1,0 +1,72 @@
+{
+  "name": "@runware/ai-sdk-provider",
+  "version": "0.1.0",
+  "description": "Runware provider for the Vercel AI SDK",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runware/ai-sdk-provider.git"
+  },
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "runware",
+    "vercel-ai-sdk",
+    "image-generation"
+  ],
+  "exports": {
+    ".": {
+      "edge-light": {
+        "import": "./dist/index.js"
+      },
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "dev": "tsup --watch",
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config ./vitest.node.config.js",
+    "test:edge": "vitest run --config ./vitest.edge.config.js",
+    "prepublishOnly": "npm run build",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@ai-sdk/provider": "^1.1.3",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@ai-sdk/provider-utils": "^2.2.8",
+    "@eslint/js": "^9.27.0",
+    "@types/node": "^18.19.101",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vitest": "3.1.3"
+  },
+  "peerDependencies": {
+    "ai": "^4.3.16"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
