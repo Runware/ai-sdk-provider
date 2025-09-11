@@ -12,7 +12,7 @@ import {
 } from '@ai-sdk/provider-utils';
 import { runwareFailedResponseHandler } from './runware-error';
 import type { RunwareImageModelId, RunwareImageSettings } from './runware-image-settings';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 interface RunwareImageModelConfig {
   provider: string;
@@ -38,7 +38,7 @@ const runwareImageResponseSchema = z.object({
       seed: z.number(),
     })
   ),
-  error: z.record(z.any()).optional(),
+  error: z.record(z.any(), z.any()).optional(),
 });
 
 export class RunwareImageModel implements ImageModelV2 {

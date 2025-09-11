@@ -1,8 +1,8 @@
 import { createJsonErrorResponseHandler } from '@ai-sdk/provider-utils';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 const runwareErrorSchema = z.object({
-  error: z.record(z.any()).optional(),
+  error: z.record(z.any(), z.any()).optional(),
 });
 
 export const runwareFailedResponseHandler = createJsonErrorResponseHandler({
