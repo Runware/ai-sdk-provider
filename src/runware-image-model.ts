@@ -1,4 +1,4 @@
-import type { ImageModelV1, ImageModelV1CallWarning } from '@ai-sdk/provider';
+import type { ImageModelV2, ImageModelV2CallWarning } from '@ai-sdk/provider';
 import type { Resolvable } from '@ai-sdk/provider-utils';
 import type { FetchFunction } from '@ai-sdk/provider-utils';
 import {
@@ -12,7 +12,7 @@ import {
 } from '@ai-sdk/provider-utils';
 import { runwareFailedResponseHandler } from './runware-error';
 import type { RunwareImageModelId, RunwareImageSettings } from './runware-image-settings';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 interface RunwareImageModelConfig {
   provider: string;
@@ -38,11 +38,11 @@ const runwareImageResponseSchema = z.object({
       seed: z.number(),
     })
   ),
-  error: z.record(z.any()).optional(),
+  error: z.record(z.any(), z.any()).optional(),
 });
 
-export class RunwareImageModel implements ImageModelV1 {
-  readonly specificationVersion = 'v1';
+export class RunwareImageModel implements ImageModelV2 {
+  readonly specificationVersion = 'v2';
 
   get provider(): string {
     return this.config.provider;
@@ -66,10 +66,10 @@ export class RunwareImageModel implements ImageModelV1 {
     providerOptions,
     headers,
     abortSignal,
-  }: Parameters<ImageModelV1['doGenerate']>[0]): Promise<
-    Awaited<ReturnType<ImageModelV1['doGenerate']>>
+  }: Parameters<ImageModelV2['doGenerate']>[0]): Promise<
+    Awaited<ReturnType<ImageModelV2['doGenerate']>>
   > {
-    const warnings: Array<ImageModelV1CallWarning> = [];
+    const warnings: Array<ImageModelV2CallWarning> = [];
     const currentDate = this.config._internal?.currentDate?.() ?? new Date();
 
     // Parse size parameter (format: "widthxheight")

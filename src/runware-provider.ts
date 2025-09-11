@@ -1,4 +1,4 @@
-import type { ImageModelV1, ProviderV1 } from '@ai-sdk/provider';
+import type { ImageModelV2, ProviderV2 } from '@ai-sdk/provider';
 import { NoSuchModelError } from '@ai-sdk/provider';
 import type { FetchFunction } from '@ai-sdk/provider-utils';
 import { withoutTrailingSlash } from '@ai-sdk/provider-utils';
@@ -29,16 +29,16 @@ export interface RunwareProviderSettings {
   fetch?: FetchFunction;
 }
 
-export interface RunwareProvider extends ProviderV1 {
+export interface RunwareProvider extends ProviderV2 {
   /**
   Creates a model for image generation.
    */
-  image(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV1;
+  image(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV2;
 
   /**
   Creates a model for image generation.
    */
-  imageModel(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV1;
+  imageModel(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV2;
 }
 
 const defaultBaseURL = 'https://api.runware.ai/v1';
