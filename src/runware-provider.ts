@@ -113,7 +113,7 @@ export function createRunware(options: RunwareProviderSettings = {}): RunwarePro
     textEmbeddingModel: () => {
       throw new NoSuchModelError({
         modelId: 'textEmbeddingModel',
-        modelType: 'textEmbeddingModel',
+        modelType: 'embeddingModel',
       });
     },
   };

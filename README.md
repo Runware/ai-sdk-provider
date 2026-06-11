@@ -19,7 +19,7 @@ This provider brings all of Runware's capabilities to the familiar Vercel AI SDK
 Getting started requires just two packages and an API key:
 
 ```bash
-npm install @runware/ai-sdk-provider ai@^4.3.16
+npm install @runware/ai-sdk-provider ai@^6.0.0
 ```
 
 You'll need a Runware API key to authenticate your requests. [Sign up at Runware](https://runware.ai/) to get your key, new accounts include free credits to get you started.

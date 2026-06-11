@@ -1,5 +1,5 @@
 import type { FetchFunction } from '@ai-sdk/provider-utils';
-import { createTestServer } from '@ai-sdk/provider-utils/test';
+import { createTestServer } from '@ai-sdk/test-server/with-vitest';
 import { describe, expect, it } from 'vitest';
 import { RunwareImageModel } from './runware-image-model';
 import type { RunwareImageSettings } from './runware-image-settings';
@@ -67,7 +67,7 @@ describe('RunwareImageModel', () => {
         providerOptions: { runware: { additional_param: 'value' } },
       });
 
-      const requestBody = await server.calls[0].requestBody;
+      const requestBody = await server.calls[0].requestBodyJson;
       expect(requestBody).toHaveLength(1);
       expect(requestBody[0]).toMatchObject({
         taskType: 'imageInference',
@@ -166,7 +166,7 @@ describe('RunwareImageModel', () => {
 
       expect(model.provider).toBe('runware');
       expect(model.modelId).toBe('runware:101@1');
-      expect(model.specificationVersion).toBe('v1');
+      expect(model.specificationVersion).toBe('v2');
       expect(model.maxImagesPerCall).toBe(1);
     });
 
