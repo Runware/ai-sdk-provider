@@ -19,7 +19,7 @@ This provider brings all of Runware's capabilities to the familiar Vercel AI SDK
 Getting started requires just two packages and an API key:
 
 ```bash
-npm install @runware/ai-sdk-provider ai@^4.3.16
+npm install @runware/ai-sdk-provider ai@^6.0.207
 ```
 
 You'll need a Runware API key to authenticate your requests. [Sign up at Runware](https://runware.ai/) to get your key, new accounts include free credits to get you started.
@@ -57,12 +57,14 @@ For advanced configuration options like setting the API key in code or custom co
 Before diving into examples, it's helpful to understand what makes Runware powerful. The platform supports a comprehensive range of image generation and manipulation techniques:
 
 **Core Generation Types:**
+
 - **Text-to-Image** - Create images from descriptive prompts.
 - **Image-to-Image** - Transform existing images while preserving structure or style.
 - **Inpainting** - Intelligently fill or replace specific areas of an image.
 - **Outpainting** - Extend images beyond their original boundaries.
 
 **Advanced AI Techniques:**
+
 - **ControlNet** - Guide generation with edge maps, poses, depth maps, or other structural inputs.
 - **LoRA (Low-Rank Adaptation)** - Apply specific artistic styles or character consistency.
 - **Identity Preservation** - Maintain consistent faces and characters using PuLID, ACE++, PhotoMaker, and similar techniques.
@@ -70,6 +72,7 @@ Before diving into examples, it's helpful to understand what makes Runware power
 - **Refiners** - Apply secondary models for enhanced detail and quality.
 
 **Flexible Output Options:**
+
 - **Multiple Formats** - PNG, WEBP, JPEG with quality control.
 - **Batch Generation** - Create up to 20 variations in a single request without speed penalties.
 - **Custom Dimensions** - Any size from 256×256 to 2048×2048 in 64-pixel increments.
@@ -101,10 +104,10 @@ const { image } = await generateImage({
   size: '1024x1024',
   providerOptions: {
     runware: {
-      steps: 30,               // More steps = higher quality, slower generation
-      CFGScale: 7.5,           // How closely to follow the prompt
+      steps: 30, // More steps = higher quality, slower generation
+      CFGScale: 7.5, // How closely to follow the prompt
       scheduler: 'Euler Beta', // Sampling algorithm
-      seed: 42,                // For reproducible results
+      seed: 42, // For reproducible results
     },
   },
 });
@@ -132,18 +135,20 @@ Most real-world applications need more control than basic text-to-image. Here's 
 ```typescript
 const { image } = await generateImage({
   model: runware.image('runware:101@1'),
-  prompt: 'A majestic dragon perched on ancient castle ruins, golden hour lighting, cinematic composition',
+  prompt:
+    'A majestic dragon perched on ancient castle ruins, golden hour lighting, cinematic composition',
   size: '1024x1024',
   providerOptions: {
     runware: {
-      steps: 25,                    // Balanced quality/speed
-      CFGScale: 8,                  // Strong prompt adherence
-      scheduler: 'DPM++ 2M',        // High-quality scheduler
-      seed: 12345,                  // Reproducible results
+      steps: 25, // Balanced quality/speed
+      CFGScale: 8, // Strong prompt adherence
+      scheduler: 'DPM++ 2M', // High-quality scheduler
+      seed: 12345, // Reproducible results
     },
   },
 });
 ```
+
 Experiment with these values to find what works best for your specific use case.
 
 ### Image-to-Image Transformation
@@ -152,13 +157,13 @@ Transform existing images while preserving their basic structure. This is perfec
 
 ```typescript
 const { image } = await generateImage({
-  model: runware.image('runware:97@2'),      // HiDream Dev
+  model: runware.image('runware:97@2'), // HiDream Dev
   prompt: 'vibrant cyberpunk scene with neon lights and futuristic elements',
   size: '1024x1024',
   providerOptions: {
     runware: {
-      seedImage: 'image-uuid',               // Accepts UUID, URL, or Base64
-      strength: 0.7,                         // 0.1 = subtle changes, 1.0 = complete transformation
+      seedImage: 'image-uuid', // Accepts UUID, URL, or Base64
+      strength: 0.7, // 0.1 = subtle changes, 1.0 = complete transformation
       steps: 20,
     },
   },
@@ -174,7 +179,8 @@ Create several variations of the same concept in a single request. This is ideal
 ```typescript
 // First, configure the model to allow multiple images
 // Note: This model configuration pattern is specific to the Vercel AI SDK
-const model = runware.image('runware:100@1', {  // Using Schnell for speed
+const model = runware.image('runware:100@1', {
+  // Using Schnell for speed
   maxImagesPerCall: 4,
   outputFormat: 'WEBP',
 });
@@ -182,11 +188,11 @@ const model = runware.image('runware:100@1', {  // Using Schnell for speed
 const { images } = await generateImage({
   model,
   prompt: 'A friendly AI assistant robot in a modern office setting',
-  n: 4,                    // Generate 4 variations
+  n: 4, // Generate 4 variations
   size: '1024x1024',
   providerOptions: {
     runware: {
-      steps: 4,              // Schnell model works well with fewer steps
+      steps: 4, // Schnell model works well with fewer steps
     },
   },
 });
@@ -210,8 +216,8 @@ const { image } = await generateImage({
   size: '1024x1024',
   providerOptions: {
     runware: {
-      seedImage: 'base-image-uuid',    // Your source image
-      maskImage: 'mask-image-uuid',    // Black/white mask (white areas get regenerated)
+      seedImage: 'base-image-uuid', // Your source image
+      maskImage: 'mask-image-uuid', // Black/white mask (white areas get regenerated)
       steps: 25,
     },
   },
@@ -241,11 +247,11 @@ For more complex applications, you might need custom configuration. The provider
 import { createRunware } from '@runware/ai-sdk-provider';
 
 const runware = createRunware({
- apiKey: 'your-specific-api-key',     // Override environment variable
- baseURL: 'https://your-proxy.com/v1', // For API proxying or custom routing
- headers: {
-   'X-Custom-Header': 'value',        // Additional headers for proxying or auth
- }
+  apiKey: 'your-specific-api-key', // Override environment variable
+  baseURL: 'https://your-proxy.com/v1', // For API proxying or custom routing
+  headers: {
+    'X-Custom-Header': 'value', // Additional headers for proxying or auth
+  },
 });
 ```
 
@@ -255,11 +261,11 @@ The Vercel AI SDK allows you to configure models with default parameters, which 
 
 ```typescript
 const highQualityModel = runware.image('runware:101@1', {
-  outputFormat: 'PNG',       // Always use PNG for this model
-  outputQuality: 95,         // High quality
-  checkNSFW: true,           // Enable content filtering
-  steps: 30,                 // Default to high quality
-  scheduler: 'DPM++ 2M',     // Preferred scheduler
+  outputFormat: 'PNG', // Always use PNG for this model
+  outputQuality: 95, // High quality
+  checkNSFW: true, // Enable content filtering
+  steps: 30, // Default to high quality
+  scheduler: 'DPM++ 2M', // Preferred scheduler
 });
 
 // Now every generation with this model uses these defaults
@@ -287,7 +293,6 @@ try {
 
   // Success - use the image
   console.log('Generated successfully:', image.url);
-
 } catch (error) {
   if (error.name === 'RunwareAPIError') {
     // API-specific errors (invalid parameters, etc.)
