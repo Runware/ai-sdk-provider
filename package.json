@@ -1,6 +1,6 @@
 {
   "name": "@runware/ai-sdk-provider",
-  "version": "1.0.0-beta.1",
+  "version": "2.0.0",
   "description": "Runware provider for the Vercel AI SDK",
   "repository": {
     "type": "git",
