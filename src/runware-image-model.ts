@@ -1,4 +1,4 @@
-import type { ImageModelV2, ImageModelV2CallWarning } from '@ai-sdk/provider';
+import type { ImageModelV3 } from '@ai-sdk/provider';
 import type { Resolvable } from '@ai-sdk/provider-utils';
 import type { FetchFunction } from '@ai-sdk/provider-utils';
 import {
@@ -41,8 +41,10 @@ const runwareImageResponseSchema = z.object({
   error: z.record(z.any(), z.any()).optional(),
 });
 
-export class RunwareImageModel implements ImageModelV2 {
-  readonly specificationVersion = 'v2';
+type RunwareCallWarning = Awaited<ReturnType<ImageModelV3['doGenerate']>>['warnings'][number];
+
+export class RunwareImageModel implements ImageModelV3 {
+  readonly specificationVersion = 'v3';
 
   get provider(): string {
     return this.config.provider;
@@ -66,10 +68,10 @@ export class RunwareImageModel implements ImageModelV2 {
     providerOptions,
     headers,
     abortSignal,
-  }: Parameters<ImageModelV2['doGenerate']>[0]): Promise<
-    Awaited<ReturnType<ImageModelV2['doGenerate']>>
+  }: Parameters<ImageModelV3['doGenerate']>[0]): Promise<
+    Awaited<ReturnType<ImageModelV3['doGenerate']>>
   > {
-    const warnings: Array<ImageModelV2CallWarning> = [];
+    const warnings: Array<RunwareCallWarning> = [];
     const currentDate = this.config._internal?.currentDate?.() ?? new Date();
 
     // Parse size parameter (format: "widthxheight")

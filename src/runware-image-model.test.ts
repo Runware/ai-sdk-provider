@@ -1,5 +1,6 @@
 import type { FetchFunction } from '@ai-sdk/provider-utils';
-import { createTestServer } from '@ai-sdk/provider-utils/test';
+import { createTestServer } from '@ai-sdk/test-server/with-vitest';
+import { generateImage } from 'ai';
 import { describe, expect, it } from 'vitest';
 import { RunwareImageModel } from './runware-image-model';
 import type { RunwareImageSettings } from './runware-image-settings';
@@ -65,9 +66,11 @@ describe('RunwareImageModel', () => {
         size: '1024x1024',
         seed: 123,
         providerOptions: { runware: { additional_param: 'value' } },
+        files: undefined,
+        mask: undefined,
       });
 
-      const requestBody = await server.calls[0].requestBody;
+      const requestBody = await server.calls[0].requestBodyJson;
       expect(requestBody).toHaveLength(1);
       expect(requestBody[0]).toMatchObject({
         taskType: 'imageInference',
@@ -95,6 +98,8 @@ describe('RunwareImageModel', () => {
         aspectRatio: undefined,
         seed: undefined,
         providerOptions: {},
+        files: undefined,
+        mask: undefined,
         headers: {
           'Custom-Request-Header': 'request-header-value',
         },
@@ -127,6 +132,8 @@ describe('RunwareImageModel', () => {
           aspectRatio: undefined,
           seed: undefined,
           providerOptions: {},
+          files: undefined,
+          mask: undefined,
         })
       ).rejects.toMatchObject({
         message: expect.stringContaining('Invalid prompt'),
@@ -149,6 +156,8 @@ describe('RunwareImageModel', () => {
           aspectRatio: undefined,
           seed: undefined,
           providerOptions: {},
+          files: undefined,
+          mask: undefined,
         });
 
         expect(result.response).toMatchObject({
@@ -160,13 +169,25 @@ describe('RunwareImageModel', () => {
     });
   });
 
+  describe('ai@6 integration', () => {
+    it('is accepted by ai@6 generateImage and returns images', async () => {
+      const { images } = await generateImage({
+        model: createBasicModel(),
+        prompt,
+        size: '1024x1024',
+      });
+
+      expect(images.length).toBeGreaterThan(0);
+    });
+  });
+
   describe('constructor', () => {
     it('should expose correct provider and model information', () => {
       const model = createBasicModel();
 
       expect(model.provider).toBe('runware');
       expect(model.modelId).toBe('runware:101@1');
-      expect(model.specificationVersion).toBe('v1');
+      expect(model.specificationVersion).toBe('v3');
       expect(model.maxImagesPerCall).toBe(1);
     });
 

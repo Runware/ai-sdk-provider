@@ -1,4 +1,4 @@
-import type { ImageModelV2, ProviderV2 } from '@ai-sdk/provider';
+import type { ImageModelV3, ProviderV3 } from '@ai-sdk/provider';
 import { NoSuchModelError } from '@ai-sdk/provider';
 import type { FetchFunction } from '@ai-sdk/provider-utils';
 import { withoutTrailingSlash } from '@ai-sdk/provider-utils';
@@ -29,16 +29,16 @@ export interface RunwareProviderSettings {
   fetch?: FetchFunction;
 }
 
-export interface RunwareProvider extends ProviderV2 {
+export interface RunwareProvider extends ProviderV3 {
   /**
   Creates a model for image generation.
    */
-  image(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV2;
+  image(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV3;
 
   /**
   Creates a model for image generation.
    */
-  imageModel(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV2;
+  imageModel(modelId: RunwareImageModelId, settings?: RunwareImageSettings): ImageModelV3;
 }
 
 const defaultBaseURL = 'https://api.runware.ai/v1';
@@ -102,6 +102,7 @@ export function createRunware(options: RunwareProviderSettings = {}): RunwarePro
     });
 
   return {
+    specificationVersion: 'v3',
     image: createImageModel,
     imageModel: createImageModel,
     languageModel: () => {
@@ -110,10 +111,10 @@ export function createRunware(options: RunwareProviderSettings = {}): RunwarePro
         modelType: 'languageModel',
       });
     },
-    textEmbeddingModel: () => {
+    embeddingModel: () => {
       throw new NoSuchModelError({
-        modelId: 'textEmbeddingModel',
-        modelType: 'textEmbeddingModel',
+        modelId: 'embeddingModel',
+        modelType: 'embeddingModel',
       });
     },
   };

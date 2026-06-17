@@ -1,5 +1,5 @@
 import { runware } from '@runware/ai-sdk-provider';
-import { experimental_generateImage as generateImage } from 'ai';
+import { generateImage } from 'ai';
 import fs from 'fs';
 
 async function main() {
@@ -17,24 +17,25 @@ async function main() {
 
   // Advanced usage with additional options
   const { images } = await generateImage({
-    model: runware.image('civitai:54354@12343', {
-      maxImagesPerCall: 4,
-      outputFormat: 'PNG',
-      outputQuality: 95,
-      negativePrompt: 'blurry, bad quality, distorted',
-      steps: 30,
-      CFGScale: 7.5,
-    }),
+    model: runware.image('civitai:54354@12343'),
     prompt: 'A dragon soaring through a starry sky',
     n: 4,
     size: '1024x1024',
     seed: 12345,
+
     providerOptions: {
       runware: {
         scheduler: 'DPM++ 2M Karras',
         clipSkip: 1,
+        outputFormat: 'PNG',
+        outputQuality: 95,
+        negativePrompt: 'blurry, bad quality, distorted',
+        steps: 30,
+        CFGScale: 7.5
       },
     },
+
+    maxImagesPerCall: 4
   });
 
   // Save multiple images to disk
